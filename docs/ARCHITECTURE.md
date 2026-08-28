@@ -105,6 +105,37 @@ A scheduler selects opted-in reminders, checks the current deadline/version and 
 |   |-- src/                         # API/worker hosts and business modules
 |   |-- tests/                       # unit, integration, architecture, contract, E2E
 |   `-- GermanyApplications.slnx
+|-- apps/
+|   |-- web/                         # React/Vite application
+|   |   |-- src/
+|   |   |   |-- app/                # composition, routes, providers
+|   |   |   |-- features/           # auth, catalogue, profile, etc.
+|   |   |   |-- components/         # reusable accessible UI
+|   |   |   |-- api/                # generated/typed client
+|   |   |   |-- i18n/{en,ta}/
+|   |   |   `-- test/
+|   |   `-- public/
+|   |-- api/                         # ASP.NET Core host
+|   `-- worker/                      # background job host
+|-- src/
+|   |-- BuildingBlocks/              # narrow shared primitives
+|   |-- Identity/
+|   |-- Profiles/
+|   |-- Catalogue/
+|   |-- Search/
+|   |-- Eligibility/
+|   |-- Applications/
+|   |-- Documents/
+|   |-- Notifications/
+|   |-- Privacy/
+|   |-- Administration/
+|   `-- Audit/                       # each module: Domain/Application/Infrastructure
+|-- tests/
+|   |-- Unit/
+|   |-- Integration/
+|   |-- Architecture/
+|   |-- Contract/
+|   `-- EndToEnd/
 |-- docs/
 |   |-- adr/                         # architecture decision records
 |   |-- runbooks/
@@ -112,6 +143,14 @@ A scheduler selects opted-in reminders, checks the current deadline/version and 
 |-- infrastructure/                 # Docker Compose and deployment configuration
 |-- scripts/
 |-- .github/workflows/
+|-- deploy/
+|   |-- compose/
+|   `-- production/                  # deployment manifests/templates
+|-- scripts/
+|-- .github/workflows/
+|-- Directory.Build.props
+|-- GermanyApplications.sln
+|-- docker-compose.yml
 `-- README.md
 ```
 
@@ -168,3 +207,4 @@ Every owned-resource endpoint derives the owner from authenticated identity, nev
 - **Caching:** cache only public, published catalogue projections. Never place authenticated/private responses in shared caches.
 - **Deletion:** programme provenance is archived rather than hard-deleted; user deletion is an orchestrated, auditable process subject to legal retention decisions.
 - **Time:** timestamps use UTC; deadlines preserve the authoritative local date/time, timezone, precision, and applicant context.
+
