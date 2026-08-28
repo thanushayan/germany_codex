@@ -4,7 +4,7 @@ Initial monorepo scaffold for a self-service platform that helps Sri Lankan stud
 
 This scaffold contains infrastructure and health verification only. It does not contain university/course data or product functionality. Read `AGENTS.md` and the planning documents in `docs/` before contributing.
 
-The relational model and its safety invariants are documented in [`docs/DATABASE_SCHEMA.md`](docs/DATABASE_SCHEMA.md).
+The relational model and its safety invariants are documented in [`docs/DATABASE_SCHEMA.md`](docs/DATABASE_SCHEMA.md). Authentication, cookie, CSRF, role, ownership, and deployment requirements are documented in [`docs/AUTHENTICATION.md`](docs/AUTHENTICATION.md).
 
 ## Repository layout
 
@@ -71,6 +71,9 @@ Health endpoints:
 
 - `GET http://localhost:5080/health/live` verifies the API process.
 - `GET http://localhost:5080/health/ready` verifies PostgreSQL connectivity.
+- `GET http://localhost:5080/api/auth/csrf` begins a cookie/CSRF-protected authentication flow.
+
+Authentication integration tests use the isolated, tmpfs-backed PostgreSQL service on `127.0.0.1:5433`. The test fixture recreates only the dedicated `germany_applications_tests` database.
 
 ## Run the frontend
 
@@ -80,7 +83,9 @@ npm ci
 npm run dev
 ```
 
-Open `http://localhost:5173`. The landing page calls the backend liveness endpoint and reports whether the API is reachable.
+Open `http://localhost:5173`. The landing page retains backend liveness verification and links to the authentication journeys.
+
+Authentication screens are available at `/register`, `/login`, `/forgot-password`, `/reset-password`, `/verify-email`, and the protected `/account` route. Reset and verification parameters use URL fragments such as `#userId=...&code=...`, so token values are not sent to the static web host.
 
 ## Build, format, lint, and test
 
@@ -108,6 +113,8 @@ npm run build
 The API accepts browser requests only from origins explicitly listed in `Cors:AllowedOrigins`; the development configuration permits `http://localhost:5173`. It does not use wildcard origins or permit credentials by default. Configure deployed origins using environment-specific configuration.
 
 Vite variables are public browser configuration. Never put API keys, passwords, tokens, connection strings, or other secrets in `VITE_*` variables. Backend secrets belong in environment-specific secret storage.
+
+Production must provide `DataProtection__KeysPath` as a protected persistent directory and replace the development-only account email sender. See `docs/AUTHENTICATION.md` for the remaining deployment controls.
 
 ## Database migrations
 

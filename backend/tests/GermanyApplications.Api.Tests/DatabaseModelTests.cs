@@ -1,6 +1,9 @@
 using GermanyApplications.Api.Data;
+using GermanyApplications.Api.Authorization;
 using GermanyApplications.Api.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace GermanyApplications.Api.Tests;
 
@@ -44,6 +47,45 @@ public sealed class DatabaseModelTests
         var exception = Assert.Throws<InvalidOperationException>(() => context.SaveChanges());
 
         Assert.Contains("immutable", exception.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task StudentOwnershipPolicy_AllowsOwnerAndRejectsAnotherStudent()
+    {
+        var ownerId = Guid.NewGuid();
+        var requirement = new StudentOwnershipRequirement();
+        var handler = new StudentOwnershipHandler();
+        var owner = new ClaimsPrincipal(new ClaimsIdentity(
+            [new Claim(ClaimTypes.NameIdentifier, ownerId.ToString()), new Claim(ClaimTypes.Role, AppRoles.Student)],
+            "test"));
+        var otherStudent = new ClaimsPrincipal(new ClaimsIdentity(
+            [new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()), new Claim(ClaimTypes.Role, AppRoles.Student)],
+            "test"));
+
+        var ownerContext = new AuthorizationHandlerContext([requirement], owner, new StudentOwnedResource(ownerId));
+        await handler.HandleAsync(ownerContext);
+        var otherContext = new AuthorizationHandlerContext([requirement], otherStudent, new StudentOwnedResource(ownerId));
+        await handler.HandleAsync(otherContext);
+
+        Assert.True(ownerContext.HasSucceeded);
+        Assert.False(otherContext.HasSucceeded);
+    }
+
+    [Fact]
+    public async Task StudentOwnershipPolicy_AllowsExplicitAdministratorOverride()
+    {
+        var requirement = new StudentOwnershipRequirement();
+        var administrator = new ClaimsPrincipal(new ClaimsIdentity(
+            [new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()), new Claim(ClaimTypes.Role, AppRoles.Admin)],
+            "test"));
+        var context = new AuthorizationHandlerContext(
+            [requirement],
+            administrator,
+            new StudentOwnedResource(Guid.NewGuid()));
+
+        await new StudentOwnershipHandler().HandleAsync(context);
+
+        Assert.True(context.HasSucceeded);
     }
 
     private static ApplicationDbContext CreateContext()

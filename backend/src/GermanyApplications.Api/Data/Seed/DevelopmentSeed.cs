@@ -7,10 +7,11 @@ namespace GermanyApplications.Api.Data.Seed;
 public static class DevelopmentSeed
 {
     public static readonly Guid StudentRoleId = Guid.Parse("10000000-0000-0000-0000-000000000001");
-    public static readonly Guid ContentAuthorRoleId = Guid.Parse("10000000-0000-0000-0000-000000000002");
-    public static readonly Guid ContentReviewerRoleId = Guid.Parse("10000000-0000-0000-0000-000000000003");
-    public static readonly Guid PrivacySupportRoleId = Guid.Parse("10000000-0000-0000-0000-000000000004");
-    public static readonly Guid SecurityAdministratorRoleId = Guid.Parse("10000000-0000-0000-0000-000000000005");
+    public static readonly Guid ContentEditorRoleId = Guid.Parse("10000000-0000-0000-0000-000000000002");
+    public static readonly Guid ReviewerRoleId = Guid.Parse("10000000-0000-0000-0000-000000000003");
+    public static readonly Guid SupportAgentRoleId = Guid.Parse("10000000-0000-0000-0000-000000000004");
+    public static readonly Guid AdminRoleId = Guid.Parse("10000000-0000-0000-0000-000000000005");
+    public static readonly Guid SuperAdminRoleId = Guid.Parse("10000000-0000-0000-0000-000000000006");
 
     private static readonly DateTimeOffset SeededAt = new(2026, 1, 1, 0, 0, 0, TimeSpan.Zero);
 
@@ -18,10 +19,11 @@ public static class DevelopmentSeed
     {
         modelBuilder.Entity<Role>().HasData(
             CreateRole(StudentRoleId, "Student"),
-            CreateRole(ContentAuthorRoleId, "ContentAuthor"),
-            CreateRole(ContentReviewerRoleId, "ContentReviewer"),
-            CreateRole(PrivacySupportRoleId, "PrivacySupport"),
-            CreateRole(SecurityAdministratorRoleId, "SecurityAdministrator"));
+            CreateRole(ContentEditorRoleId, "ContentEditor"),
+            CreateRole(ReviewerRoleId, "Reviewer"),
+            CreateRole(SupportAgentRoleId, "SupportAgent"),
+            CreateRole(AdminRoleId, "Admin"),
+            CreateRole(SuperAdminRoleId, "SuperAdmin"));
 
         var universityId = Guid.Parse("20000000-0000-0000-0000-000000000001");
         modelBuilder.Entity<University>().HasData(new

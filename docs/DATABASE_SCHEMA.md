@@ -119,7 +119,7 @@ Indexes should be revisited with real, privacy-safe query plans and representati
 
 The model seed contains only:
 
-- five role definitions: `Student`, `ContentAuthor`, `ContentReviewer`, `PrivacySupport`, and `SecurityAdministrator`; and
+- six role definitions: `Student`, `ContentEditor`, `Reviewer`, `SupportAgent`, `Admin`, and `SuperAdmin`; and
 - one synthetic university with two synthetic, explicitly labelled, development-only draft courses.
 
 The synthetic courses have no source URL, cannot satisfy the publication constraint while marked as development samples, and must never be presented as real programmes. No users, student profiles, qualifications, applications, documents, consent events, or other personal data are seeded.
