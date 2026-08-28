@@ -20,6 +20,7 @@ Planning documents precede application code. Architecture decisions with materia
 
 ### Phase 1 — Engineering foundation
 
+- Scaffold the `backend/` .NET solution/module boundaries, `frontend/` React/Vite/Tailwind/i18n app, PostgreSQL/EF configuration, and `infrastructure/` Docker Compose developer dependencies.
 - Scaffold repository, .NET solution/module boundaries, React/Vite/Tailwind/i18n app, PostgreSQL/EF migrations, and Docker Compose developer dependencies.
 - Establish CI for formatting, linting, type checking, build, tests, migration checks, SAST/SCA/secret/container scans, and artefacts.
 - Implement configuration validation, secrets integration contracts, structured redacted logging, correlation, metrics/traces, health endpoints, problem details, baseline headers/CSP and test fixtures.

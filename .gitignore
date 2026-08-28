@@ -1,0 +1,25 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Frontend
+node_modules/
+frontend/dist/
+frontend/coverage/
+
+# .NET
+**/bin/
+**/obj/
+TestResults/
+*.user
+*.suo
+
+# Editors and operating systems
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store

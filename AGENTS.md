@@ -54,6 +54,10 @@ If documents conflict, choose the safer/narrower interpretation and report the c
 Follow the planned structure as it is scaffolded:
 
 ```text
+frontend/                  React/Vite application
+backend/src/               ASP.NET Core API/worker hosts and business modules
+backend/tests/             unit, integration, architecture, contract, and E2E tests
+infrastructure/            Docker Compose and deployment configuration
 apps/web/                  React/Vite application
 apps/api/                  ASP.NET Core API host
 apps/worker/               background worker host
@@ -71,6 +75,7 @@ deploy/                    local/production deployment material
 scripts/                   repeatable development/CI utilities
 ```
 
+- Organise frontend code under `frontend/src/app`, `features`, `components`, `api`, `i18n/{en,ta}`, and `test`.
 - Organise frontend code under `apps/web/src/app`, `features`, `components`, `api`, `i18n/{en,ta}`, and `test`.
 - Align frontend feature folders with backend modules where practical.
 - Within a backend module, separate Domain, Application, Infrastructure, and API concerns. Domain code must not depend on infrastructure.
@@ -108,6 +113,18 @@ scripts/                   repeatable development/CI utilities
 
 ## Build and local development commands
 
+The initial application scaffold is present. Use repository scripts and configuration as the source of truth. Baseline commands are:
+
+```bash
+# Local dependencies / complete stack
+docker compose --env-file infrastructure/.env -f infrastructure/compose.yaml up -d
+docker compose --env-file infrastructure/.env -f infrastructure/compose.yaml down
+
+# Backend (from repository root)
+dotnet restore backend/GermanyApplications.slnx
+dotnet build backend/GermanyApplications.slnx --no-restore
+
+# Frontend (from frontend)
 The application has not yet been scaffolded. Once the planned files exist, use the repository scripts/configuration as the source of truth. Expected baseline commands are:
 
 ```bash
@@ -129,6 +146,13 @@ Use the package manager and lockfile committed by the project. Do not switch pac
 
 ## Test and quality commands
 
+**Run relevant tests after every implementation.** Start with the narrowest affected tests, then run the appropriate broader suites before completion. Baseline commands are:
+
+```bash
+# Backend
+dotnet test backend/GermanyApplications.slnx --no-build
+
+# Frontend (from frontend)
 **Run relevant tests after every implementation.** Start with the narrowest affected tests, then run the appropriate broader suites before completion. Expected baseline commands after scaffolding are:
 
 ```bash
@@ -141,6 +165,7 @@ npm run lint
 npm run typecheck
 
 # Full local stack / integration and end-to-end suites
+docker compose --env-file infrastructure/.env -f infrastructure/compose.yaml up -d
 docker compose up -d
 # Run the repository's documented integration/contract/E2E commands.
 ```
@@ -196,6 +221,7 @@ docker compose up -d
 ## English and Tamil localisation rules
 
 - English and Tamil must have functional parity for critical MVP journeys, notices, validation, disclaimers, notifications, and accessibility labels.
+- Put all user-visible text in translation resources under `frontend/src/i18n/{en,ta}`. Do not hard-code user-facing strings in components or concatenate translated fragments.
 - Put all user-visible text in translation resources under `apps/web/src/i18n/{en,ta}` once scaffolded. Do not hard-code user-facing strings in components or concatenate translated fragments.
 - Use stable semantic translation keys, interpolation placeholders, and locale-aware plural/date/number formatting. Keep internal/API enums locale-independent.
 - Set the document/element `lang` correctly. Do not assume Tamil is a right-to-left language; Tamil is left-to-right.

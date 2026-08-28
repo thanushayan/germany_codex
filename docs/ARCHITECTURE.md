@@ -93,6 +93,18 @@ A scheduler selects opted-in reminders, checks the current deadline/version and 
 
 ```text
 /
+|-- frontend/                        # React/Vite application
+|   `-- src/
+|       |-- app/                     # composition, routes, providers
+|       |-- features/                # auth, catalogue, profile, etc.
+|       |-- components/              # reusable accessible UI
+|       |-- api/                     # generated/typed client
+|       |-- i18n/{en,ta}/
+|       `-- test/
+|-- backend/
+|   |-- src/                         # API/worker hosts and business modules
+|   |-- tests/                       # unit, integration, architecture, contract, E2E
+|   `-- GermanyApplications.slnx
 |-- apps/
 |   |-- web/                         # React/Vite application
 |   |   |-- src/
@@ -128,6 +140,9 @@ A scheduler selects opted-in reminders, checks the current deadline/version and 
 |   |-- adr/                         # architecture decision records
 |   |-- runbooks/
 |   `-- threat-models/
+|-- infrastructure/                 # Docker Compose and deployment configuration
+|-- scripts/
+|-- .github/workflows/
 |-- deploy/
 |   |-- compose/
 |   `-- production/                  # deployment manifests/templates
